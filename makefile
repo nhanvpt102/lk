@@ -18,8 +18,6 @@ do-nothing := 1
 $(MAKECMDGOALS) _all: make-make
 make-make:
 	@PROJECT=$(project-name) $(MAKE) $(filter-out $(project-name), $(MAKECMDGOALS))
-	@PROJECT=$(project-name) $(MAKE) clean
-	@PROJECT=$(project-name) $(MAKE) $(filter-out $(project-name), $(MAKECMDGOALS)) ROOTFS_RW=true
 
 # IMA_KERNEL_CMDLINE_OPTIONS are usually coming from ima.conf file.
 ifeq ($(ENABLE_IMA),1)
@@ -103,11 +101,8 @@ CFLAGS += -DSWI_IMAGE_LK
 CFLAGS += -DSSDP_OVER_SPI
 CFLAGS += -DENABLE_HASH_CHECK
 CFLAGS += -DIMA_KERNEL_CMDLINE_OPTIONS="\"$(IMA_KERNEL_CMDLINE_OPTIONS)\""
-ifeq ($(ROOTFS_RW),true)
-CFLAGS += -DFUDGE_ROOTFS
 ifeq ($(IMA_ENFORCE),true)
 CFLAGS += -DENABLE_IMA=${ENABLE_IMA}
-endif
 endif
 # SWISTOP
 

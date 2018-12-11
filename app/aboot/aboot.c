@@ -201,9 +201,6 @@ static const char *baseband_apq_nowgr   = " androidboot.baseband=baseband_apq_no
 #ifdef SIERRA
 static const char *lkquiet          = " quiet";
 static const char *lkversion        = " lkversion=" LKVERSION;
-#ifdef FUDGE_ROOTFS
-static const char *rootfs_rw        = " fudge_ro_rootfs=true";
-#endif /* FUDGE_ROOTFS */
 
 #ifdef ENABLE_IMA
 static char *ima_enforce      = " "IMA_KERNEL_CMDLINE_OPTIONS;
@@ -677,9 +674,6 @@ unsigned char *update_cmdline(const char * cmdline)
 	if(TRUE != sierra_is_bootquiet_disabled()) {
 	     cmdline_len += strlen(lkquiet);
 	}
-#ifdef FUDGE_ROOTFS
-	cmdline_len += strlen(rootfs_rw);
-#endif
 	bool want_ima_ready = ima_fuse_get();
 
 	if (want_ima_ready == true) {
@@ -804,25 +798,17 @@ unsigned char *update_cmdline(const char * cmdline)
 		}
 
 #ifdef SIERRA
-                if(TRUE != sierra_is_bootquiet_disabled())
-	        {
+        if(TRUE != sierra_is_bootquiet_disabled())
+        {
 		    src = lkquiet;
 		    if (NULL != have_cmdline)
 		    {
 		        --dst;
 		    }
 		    while ((*dst++ = *src++) != '\0');
-                }
+        }
 
-#ifdef FUDGE_ROOTFS
-		src = rootfs_rw;
-		if (NULL != have_cmdline)
-		{
-		    --dst;
-		}
-		while ((*dst++ = *src++) != '\0');
-#endif
-		src = ima_enforce;
+        src = ima_enforce;
 		if (NULL != have_cmdline)
 		{
 		    --dst;
